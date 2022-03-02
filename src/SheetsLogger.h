@@ -33,7 +33,7 @@ HMUfpIBvFSDJ3gyICh3WZlXi/EjJKSZp4A==\n\
 #define SL_DEBUG_ERROR 0
 #define SL_DEBUG_INFO 1
 
-#define SL_DEBUG SL_DEBUG_INFO
+#define SL_DEBUG SL_DEBUG_ERROR
 
 #if SL_DEBUG >= SL_DEBUG_ERROR
     #define SL_ERROR_LINE(message, ...) printf("!!!ERROR!!! [%7d][%.2fkb] Sheets Logger: " message "\n", millis(), (esp_get_free_heap_size() * 0.001f), ##__VA_ARGS__)

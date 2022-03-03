@@ -3,6 +3,7 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
+#include <stdarg.h>
 
 void sheetLog(const char *url, const char *ns, const char *message) {
     if (WiFi.status() != WL_CONNECTED) {
@@ -23,6 +24,9 @@ void sheetLog(const char *url, const char *ns, const char *message) {
     https->addHeader("Content-Type", "application/json");
 
     String payload = "{\"device\":\"" + String(ns) + "\",\"message\":\"" + message + "\",\"secret\":\"" + SL_SECRET + "\"}";
+
+    payload.replace("\r\n", " ");
+    payload.replace("\n", " ");
 
     SL_INFO_LINE("Posting payload: %s", payload.c_str());
     int res = https->POST(payload);

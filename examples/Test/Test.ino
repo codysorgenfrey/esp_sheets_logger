@@ -2,6 +2,8 @@
 #include <SheetsLogger.h>
 #include "secrets.h"
 
+#define LOG(message, ...) sl_printf(SHEETS_URL, "Sheets Logger", ">>> [%07u] Sheets Logger: " message "\n", millis(), ##__VA_ARGS__)
+
 void setup() {
     Serial.begin(115200);
     while (!Serial) { ; }; // wait for serial
@@ -13,7 +15,7 @@ void setup() {
     }
     Serial.println("Connected.");
 
-    sheetLog(SHEETS_URL, "Test.ino", "This is a test log from ESP32.");
+    LOG("This is a test log from ESP32.");
 }
 
 void loop() {}

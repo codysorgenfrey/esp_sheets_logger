@@ -46,6 +46,6 @@ HMUfpIBvFSDJ3gyICh3WZlXi/EjJKSZp4A==\n\
 
 void sheetLog(const char *url, const char *ns, const char *message);
 
-int sl_printf(bool cloud, const char *format, ...);
+int sl_printf(const char *url, const char *ns, const char *format, ...);
 
 #endif

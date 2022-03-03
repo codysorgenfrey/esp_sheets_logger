@@ -48,13 +48,16 @@ int sl_printf(const char *url, const char *ns, const char *format, ...) {
     va_list args;
     va_start(args, format);
 
-    int size = vprintf(format, args);
-    char *cloudMsg = (char *)malloc(size + 1);
-    sprintf(cloudMsg, format, args);
+    int size = vsnprintf(NULL, 0, format, args);
+    SL_INFO_LINE("Size: %i", size + 1);
+    char cloudMsg[size + 1]; // +1 for the terminating char
+    SL_INFO_LINE("Size of cldMsg: %i", sizeof(cloudMsg));
+    size = vsnprintf(cloudMsg, sizeof(cloudMsg), format, args);
+    if (size >= 0) {
+        sheetLog(url, ns, cloudMsg);
+        printf(cloudMsg);
+    }
 
     va_end(args);
-
-    sheetLog(url, ns, cloudMsg);
-
     return size;
 }

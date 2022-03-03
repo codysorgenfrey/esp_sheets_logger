@@ -2,7 +2,7 @@
 #include <SheetsLogger.h>
 #include "secrets.h"
 
-#define LOG(message, ...) sl_printf(SHEETS_URL, "Sheets Logger", ">>> [%07u] Sheets Logger: " message "\n", millis(), ##__VA_ARGS__)
+#define LOG(message, ...) sl_printf(SHEETS_URL, "Sheets Logger", ">>> [%7lu][%.2fkb] Sheets Logger: " message "\n", millis(), (esp_get_free_heap_size() * 0.001f), ##__VA_ARGS__)
 
 void setup() {
     Serial.begin(115200);
@@ -18,4 +18,8 @@ void setup() {
     LOG("This is a test log from ESP32.");
 }
 
-void loop() {}
+void loop() {
+    if (millis() % 30000 == 0) {
+        LOG("It's been awhile...");
+    }
+}

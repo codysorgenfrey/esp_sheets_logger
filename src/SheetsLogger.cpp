@@ -26,7 +26,13 @@ void setClock() {
     SL_INFO_LINE("Current time: %s", asctime(&timeinfo));
 }
 
-void sheetLog(const char *url, const char *ns, const char *message) {
+void sheetLog(
+    const char *url,
+    const char *key,
+    const char *notify,
+    const char *ns,
+    const char *message
+) {
     if (WiFi.status() == WL_CONNECTED) {
         WiFiClientSecure client;
         HTTPClient https;
@@ -42,10 +48,18 @@ void sheetLog(const char *url, const char *ns, const char *message) {
         #endif
         
         if (https.begin(client, url)) {
-            https.addHeader("Content-Type", "application/json");
+            https.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            String payload = "{\"device\":\"" + String(ns) + "\",\"message\":\"" + message + "\",\"secret\":\"" + SL_SECRET + "\"}";
-
+            String payload = "key=";
+            payload += key;
+            if (notify != NULL) {
+                payload += "&notify=";
+                payload += notify;
+            }
+            payload += "&device=";
+            payload += ns;
+            payload += "&message=";
+            payload += message;
             payload.replace("\r\n", " ");
             payload.replace("\n", " ");
 
@@ -57,29 +71,23 @@ void sheetLog(const char *url, const char *ns, const char *message) {
 
             client.stop();
             https.end();
-        } else SL_ERROR_LINE("Could not connect to %s", url);
+        } else {
+            SL_ERROR_LINE("Could not connect to %s", url);
+        }
     } else {
         SL_ERROR_LINE("Not connected to WiFi.");
-        SL_ERROR_LINE("Message: %s", message);
     }
 }
 
-int sl_printCloud(const char *url, const char *ns, const char *format, ...) {
-    va_list args;
-    va_start(args, format);
-
-    int size = vsnprintf(NULL, 0, format, args);
-    SL_INFO_LINE("Size: %i", size + 1);
-    char cloudMsg[size + 1]; // +1 for the terminating char
-    SL_INFO_LINE("Size of cldMsg: %i", sizeof(cloudMsg));
-    size = vsnprintf(cloudMsg, sizeof(cloudMsg), format, args);
-    if (size >= 0) sheetLog(url, ns, cloudMsg);
-
-    va_end(args);
-    return size;
-}
-
-int sl_printf(const char *url, const char *ns, const char *format, ...) {
+int sl_printf(
+    const char *url,
+    const char *key,
+    const char *notify,
+    const bool localPrint,
+    const char *ns,
+    const char *format,
+    ...
+) {
     va_list args;
     va_start(args, format);
 
@@ -89,8 +97,8 @@ int sl_printf(const char *url, const char *ns, const char *format, ...) {
     SL_INFO_LINE("Size of cldMsg: %i", sizeof(cloudMsg));
     size = vsnprintf(cloudMsg, sizeof(cloudMsg), format, args);
     if (size >= 0) {
-        sheetLog(url, ns, cloudMsg);
-        printf(cloudMsg);
+        sheetLog(url, key, notify, ns, cloudMsg);
+        if (localPrint) printf(cloudMsg);
     }
 
     va_end(args);

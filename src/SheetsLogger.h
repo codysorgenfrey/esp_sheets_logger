@@ -43,7 +43,6 @@ F62ARPBopY+Udf90WuioAnwMCeKpSwughQtiue+hMZL77/ZRBIls6Kl0obsXs7X9\n\
 SQ98POyDGCBDTtWTurQ0sR8WNh8M5mQ5Fkzc4P4dyKliPUDqysU0ArSuiYgzNdws\n\
 E3PYJ/HQcu51OyLemGhmW/HGY0dVHLqlCFF1pkgl\n\
 -----END CERTIFICATE-----\n"
-#define SL_SECRET "*$9N94f&mQTN"
 
 // Logging
 #define SL_DEBUG_ERROR 0
@@ -63,7 +62,14 @@ E3PYJ/HQcu51OyLemGhmW/HGY0dVHLqlCFF1pkgl\n\
     #define SL_INFO_LINE(message, ...)
 #endif
 
-int sl_printCloud(const char *url, const char *ns, const char *format, ...);
-int sl_printf(const char *url, const char *ns, const char *format, ...);
+int sl_printf(
+    const char *url,
+    const char *key,
+    const char *notify,
+    const bool localPrint,
+    const char *ns,
+    const char *format,
+    ...
+);
 
 #endif

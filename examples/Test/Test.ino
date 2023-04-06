@@ -1,8 +1,18 @@
-#include <ESP8266WiFi.h>
+#ifdef ESP32
+    #include <WiFi.h>
+#endif
+#ifdef ESP8266
+    #include <ESP8266WiFi.h>
+#endif
 #include <SheetsLogger.h>
 #include "secrets.h"
 
-#define LOG(message, ...) sl_printf(SHEETS_URL, "Sheets Logger", ">>> [%10lu][%.5fkb] Sheets Logger: " message "\n", millis(), (system_get_free_heap_size() * 0.001f), ##__VA_ARGS__)
+#ifdef ESP32
+    #define LOG(message, ...) sl_printf(SHEETS_URL, SHEETS_KEY, NULL, true, "Sheets Logger", ">>> [%10lu][%.5fkb] Sheets Logger: " message "\n", millis(), (ESP.getFreeHeap() * 0.001f), ##__VA_ARGS__)
+#endif
+#ifdef ESP8266
+    #define LOG(message, ...) sl_printf(SHEETS_URL, SHEETS_KEY, NULL, true, "Sheets Logger", ">>> [%10lu][%.5fkb] Sheets Logger: " message "\n", millis(), (system_get_free_heap_size() * 0.001f), ##__VA_ARGS__)
+#endif
 
 void setup() {
     Serial.begin(115200);

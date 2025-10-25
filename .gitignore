@@ -1,5 +1,4 @@
 secrets.h
 build
-.vscode
 debug*
 esp32.svd

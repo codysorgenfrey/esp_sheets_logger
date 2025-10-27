@@ -1,4 +1,3 @@
-#pragma once
 #ifndef __SHEETSLOGGER_H__
 #define __SHEETSLOGGER_H__
 
@@ -8,7 +7,7 @@
     #define FREE_HEAP() esp_get_free_heap_size() * 0.001f
 #endif
 #ifdef ESP8266
-    #define FREE_HEAP() system_get_free_heap_size() * 0.001f
+    #define FREE_HEAP() ESP.getFreeHeap() * 0.001f
 #endif
 
 #define SL_CERT \

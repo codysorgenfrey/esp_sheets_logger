@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.embeddedhtml": "html",
+    "*.pyp": "python",
+    "system_error": "cpp"
+  }
+}
